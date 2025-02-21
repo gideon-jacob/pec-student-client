@@ -1,0 +1,65 @@
+@use './sass' as *;
+@use './sass/reset';
+@use './sass/grid';
+ 
+.bg-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    @include lg {
+        flex-direction: row-reverse;
+    }
+
+    @include light {
+        background-color: #fffbfe;
+        color: #1b191e;
+    }
+
+    @include dark {
+        background-color: #1c1b1f;
+        color: #e8e8e8;
+    }
+    
+    .body {
+        height: 85vh;
+        overflow-y: hidden;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        
+        @include lg {
+            flex-grow: 1;
+            min-height: 100vh;
+        }
+    }
+
+    .navbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        flex-shrink: 0;
+        padding-top: 1.25rem;
+        height: 15vh;
+
+        @include lg {
+            flex-direction: column;
+            align-items: flex-end;
+            
+            padding: 0;
+            padding-right: 3rem;
+            width: grid.columns(3);
+            min-height: 100vh;
+        }
+
+        @include light {
+            background-color: #f2ecf7;
+        }
+
+        @include dark {
+            background-color: #2a2831;
+        }
+    }
+}

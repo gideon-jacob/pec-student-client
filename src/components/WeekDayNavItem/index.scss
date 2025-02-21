@@ -1,0 +1,36 @@
+@use '../../sass' as *;
+
+.weekday-navbar {
+    .weekday-nav-item {
+        padding: $padding;
+        border-radius: 100%;
+        aspect-ratio: 1 / 1;
+        height: 50px;
+        width: 50px;
+        border: none;
+
+        cursor: pointer;
+        outline: none;
+        font-weight: 500;
+
+        @include light {
+            background-color: #f9f5f9;
+            color: #817a8e;
+        }
+
+        @include dark {
+            background-color: #2a2831;
+            color: #bbb2c6;
+        }
+
+        &.active {
+            @include light {
+                background-color: #eaddfe;
+            }
+    
+            @include dark {
+                background-color: #4a4458;
+            }
+        }
+    }
+}

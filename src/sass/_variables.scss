@@ -1,0 +1,26 @@
+@use './colors' as *;
+@use 'sass:color';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+//TODO Orgainse things
+
+// base colors variables
+// $text-primary: $snow-text-1;
+// $text-secondary: color.adjust($text-primary, $lightness: -10%);
+
+// $base-background: $snow-bg-1;
+// $base-background-2: $snow-bg-2;
+// $card-background: #ffffff;
+
+// Font Families
+$font-family: 'Rubik', 'Inter', serif;
+
+// base variables
+$box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
+
+$font-size: 1rem;
+$border-radius: 2rem;
+$padding: 1rem;
+$margin: 1rem;
+$gap: 1rem;

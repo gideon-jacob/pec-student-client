@@ -1,0 +1,24 @@
+@use '../../sass' as *;
+
+.navbar {
+    .nav-item {
+        text-decoration: none;
+        padding: 8px;
+        border-radius: 8px;
+        border: 2px solid transparent;
+
+        @include light {
+            color: #1b1826;
+        }
+
+        @include dark {
+            // TODO Change color
+            color: #e8def8; // this is icon color
+            // there will be seperate color for text
+        }
+
+        &.active {
+            border: 2px solid #ccc;
+        }
+    }
+}

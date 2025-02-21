@@ -1,0 +1,34 @@
+@use '../../sass' as *;
+
+.progress-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $gap;
+    width: 100px;
+
+    .title {
+        margin: 0;
+    }
+    
+    .progress-bar-light {
+        @include light {
+            display: block;
+        }
+    
+        @include dark {
+            display: none;
+        }
+    }
+    
+    .progress-bar-dark {
+        @include light {
+            display: none;
+        }
+    
+        @include dark {
+            display: block;
+        }
+    }
+}
+

@@ -1,0 +1,152 @@
+@use '../../sass' as *;
+@use '../../sass/grid';
+
+.home-container {
+    height: 85vh;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
+    @include lg {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        flex-grow: 1;
+        min-height: 100vh;
+        overflow-y: auto;
+        margin-right: 5px;
+
+        &::-webkit-scrollbar {
+            display: block;
+            width: 5px;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: #cccccc66;
+            border-radius: 10px;
+        }
+    
+        &::-webkit-scrollbar-track {
+            background: transparent;
+            margin: 10px 0;
+        }
+    }
+
+    .home-header {
+        padding-top: $padding * 2;
+        padding-left: $padding;
+        padding-right: $padding * 2;
+        width: grid.columns(12);
+    
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    
+        .greeting {
+            font-size: $font-size * 0.9;
+            font-weight: 400;
+
+            
+            .username {
+                font-size: $font-size * 1.9;
+                
+                @include lg {
+                    font-size: $font-size * 2.5;
+                }
+            }
+        }
+
+        .notification-button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+
+            .notification-icon {
+                font-size: $font-size * 1.75;
+
+                @include lg {
+                    font-size: $font-size * 2.35;
+                }
+    
+                @include light {
+                    color: #654ea2;
+                }
+    
+                @include dark {
+                    color: #d1bdff;
+                }
+            }
+        }
+    }
+
+    .stats-container {
+        display: flex;
+        flex-direction: row;
+        align-self: flex-start;
+        flex-shrink: 0;
+        gap: $gap;
+
+        overflow-x: auto;
+        padding: $padding;
+        width: grid.columns(12);
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        @include lg {
+            order: 2;
+            width: grid.columns(5);
+
+            flex-wrap: wrap;
+        }
+    }
+
+    .timetable-container {
+        width: grid.columns(12);
+
+        @include lg {
+            order: 1;
+            width: grid.columns(7);
+        }
+
+        .weekday-navbar {
+            display: flex;
+            flex-direction: row;
+            gap: $gap;
+            padding: $padding;
+            overflow-x: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            @include md {
+                justify-content: center;
+            }
+
+            @include lg {
+                justify-content: flex-start;
+            }
+        }
+
+        .subject-card-container {
+            display: flex;
+            flex-direction: column;
+            gap: $gap;
+            padding: $padding;
+            
+            @include lg {
+                min-height: 80vh;
+            }
+        }
+    }
+}

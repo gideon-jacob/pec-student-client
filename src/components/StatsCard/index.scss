@@ -1,0 +1,43 @@
+@use '../../sass' as *;
+
+.stats-card {
+    $size: 150px;
+    width: $size;
+    height: $size;
+    border-radius: $border-radius;
+    padding: $padding;
+
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    @include md {
+        flex-grow: 1;
+    }
+
+    @include light {
+        background-color: #eaddfe;
+        color: #664fa3;
+    }
+
+    @include dark {
+        background-color: #4f378b;
+        color: #c2adf2;
+    }
+
+    * {
+        margin: 0;
+    }
+
+    .metric {
+        font-size: $font-size * 2.5;
+    }
+
+    .description {
+        font-size: $font-size;
+    }
+}
