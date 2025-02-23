@@ -2,7 +2,7 @@
 import { Component, ReactNode } from 'react'
 import { getDay } from 'date-fns'
 import { IoIosNotifications as NotificationIcon } from "react-icons/io"
-import axiox from 'axios'
+import axios from 'axios'
 
 // Components
 import StatsCard from '../../components/StatsCard'
@@ -14,6 +14,9 @@ import './index.scss'
 
 // Constants
 // import timetableList from './timetable'
+const weekdayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const localTimetable: string | null = localStorage.getItem('timetableList')
+
 interface Timetable {
     day: string;
     slotNumber: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -24,27 +27,21 @@ interface Timetable {
     attandancePercentage: number;
 }
 
-let timetableList: Timetable[]
-const weekdayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-
-async function getTimetableList() {
-    const response = await axiox.get('http://localhost:5000/api/timetable')
-    timetableList = response.data.timetable
-}
-
 interface HomeState {
     activeWeekday: string;
     activeSlotNumber: number;
     isLoading: boolean;
+    timetableList: Timetable[];
 }
 
 class Home extends Component<unknown, HomeState> {
     state: HomeState = {
         activeWeekday: weekdayList[getDay(new Date())],
         activeSlotNumber: 0,  // 0 means no active slot
-        isLoading: true,
+        isLoading: localTimetable === null,
+        timetableList: localTimetable? JSON.parse(localTimetable) : [],
     }
-    
+
     onChangeActiveWeekDay = (weekday: string) => {
         this.setState({
             activeWeekday: weekday,
@@ -55,20 +52,35 @@ class Home extends Component<unknown, HomeState> {
     onChangeActiveSlot = (slotNumber: number) => {
         this.setState(prevState => {
             if (prevState.activeSlotNumber === slotNumber) {
-                return ({activeSlotNumber: 0})
+                return ({ activeSlotNumber: 0 })
             } else {
-                return ({activeSlotNumber: slotNumber})
+                return ({ activeSlotNumber: slotNumber })
             }
         })
     }
 
+    getTimetableList = async () => {
+        const { isLoading } = this.state
+        
+        if (isLoading) {
+            const response = await axios.get('https://5b60i1fwi9.execute-api.ap-south-1.amazonaws.com/api/timetable')
+            const timetableList = response.data.timetable as Timetable[]
+
+            this.setState({
+                isLoading: false,
+                timetableList,
+            })
+
+            localStorage.setItem('timetableList', JSON.stringify(timetableList))
+        }
+    }
+
     componentDidMount(): void {
-        getTimetableList();
-        this.setState({isLoading: false})
+        this.getTimetableList();
     }
 
     render(): ReactNode {
-        const { activeWeekday, activeSlotNumber } = this.state
+        const { activeWeekday, activeSlotNumber, isLoading, timetableList } = this.state
 
         return (
             <>
@@ -83,7 +95,7 @@ class Home extends Component<unknown, HomeState> {
                             <NotificationIcon className='notification-icon' />
                         </button>
                     </header>
-                    
+
                     <div className='stats-container'>
                         <StatsCard description='Overall Attandance' metric='98%' />
                         <StatsCard description='Overall Credits Earned' metric='68' />
@@ -104,11 +116,13 @@ class Home extends Component<unknown, HomeState> {
                             }
                         </nav>
 
-                        <div className='subject-card-container'>
-                            {
-                                timetableList
-                                    .filter(timetable => timetable.day === activeWeekday)
-                                    .map((timetable, index) => (
+                        {
+                            !isLoading &&
+                            <div className='subject-card-container'>
+                                {
+                                    timetableList
+                                        .filter(timetable => timetable.day === activeWeekday)
+                                        .map((timetable, index) => (
                                             <SubjectCard
                                                 key={index}
                                                 {...timetable}
@@ -116,8 +130,9 @@ class Home extends Component<unknown, HomeState> {
                                                 onChangeActiveSlot={this.onChangeActiveSlot}
                                             />
                                         ))
-                            }
-                        </div>
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </>

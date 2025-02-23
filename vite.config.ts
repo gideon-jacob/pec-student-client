@@ -9,12 +9,5 @@ export default defineConfig({
     port: 3000,
     watch: { usePolling: true },
     allowedHosts: ['.ngrok-free.app'],
-    proxy: {
-      '/api': {
-        target: 'http://server:5000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
   },
 })
