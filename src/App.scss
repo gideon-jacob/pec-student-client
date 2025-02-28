@@ -1,11 +1,15 @@
 @use './sass' as *;
 @use './sass/reset';
 @use './sass/grid';
+
+@function responsive-height($height) {
+    @return calc(var(--vh) * #{$height});
+}
  
 .bg-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: responsive-height(100);
 
     @include lg {
         flex-direction: row-reverse;
@@ -22,8 +26,9 @@
     }
     
     .body {
-        height: 85vh;
-        overflow-y: hidden;
+        height: responsive-height(85);
+        flex-grow: 1;
+        overflow-y: auto;
 
         &::-webkit-scrollbar {
             display: none;
@@ -41,8 +46,8 @@
         justify-content: space-evenly;
         align-items: flex-start;
         flex-shrink: 0;
-        padding-top: 1.25rem;
-        height: 15vh;
+        padding: 1.25rem;
+        overflow-x: auto; //REVIEW: This is a temporary fix for the navbar overflow issue
 
         @include lg {
             flex-direction: column;

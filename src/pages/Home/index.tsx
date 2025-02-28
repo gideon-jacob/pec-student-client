@@ -133,6 +133,8 @@ class Home extends Component<unknown, HomeState> {
                                 }
                             </div>
                         }
+
+                        { isLoading && <div className='subject-card-container'></div> }
                     </div>
                 </div>
             </>

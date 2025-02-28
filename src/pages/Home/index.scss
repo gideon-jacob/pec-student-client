@@ -2,11 +2,9 @@
 @use '../../sass/grid';
 
 .home-container {
-    height: 85vh;
-    overflow-y: auto;
-
     display: flex;
     flex-direction: column;
+    align-content: flex-start;
 
     &::-webkit-scrollbar {
         display: none;
@@ -48,7 +46,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-    
+
         .greeting {
             font-size: $font-size * 0.9;
             font-weight: 400;
@@ -143,10 +141,6 @@
             flex-direction: column;
             gap: $gap;
             padding: $padding;
-            
-            @include lg {
-                min-height: 80vh;
-            }
         }
     }
 }
