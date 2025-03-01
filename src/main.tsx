@@ -19,6 +19,11 @@ const setViewPortHeight = () => {
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
+
+window.addEventListener('resize', () => {
+  setViewPortHeight()
+});
+
 setAppTheme()
 setViewPortHeight()
 createRoot(document.getElementById('root')!).render(

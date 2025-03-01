@@ -42,6 +42,12 @@ class Home extends Component<unknown, HomeState> {
         timetableList: localTimetable? JSON.parse(localTimetable) : [],
     }
 
+    private activeDayRef: HTMLButtonElement | null = null;
+
+    setActiveDayRef = (element: HTMLButtonElement) => {
+        this.activeDayRef = element
+    }
+
     onChangeActiveWeekDay = (weekday: string) => {
         this.setState({
             activeWeekday: weekday,
@@ -77,6 +83,11 @@ class Home extends Component<unknown, HomeState> {
 
     componentDidMount(): void {
         this.getTimetableList();
+        this.activeDayRef?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+        });
     }
 
     render(): ReactNode {
@@ -111,6 +122,7 @@ class Home extends Component<unknown, HomeState> {
                                         day={day}
                                         isActive={day === activeWeekday}
                                         onChangeActiveWeekDay={this.onChangeActiveWeekDay}
+                                        setActiveDayRef={this.setActiveDayRef}
                                     />
                                 ))
                             }

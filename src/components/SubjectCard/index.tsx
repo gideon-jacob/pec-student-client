@@ -4,7 +4,6 @@ import { AiTwotoneExperiment as LabIcon } from "react-icons/ai";
 import { FaRunning as ActivityIcon } from "react-icons/fa";
 import { IoIosArrowDown as ToggleIcon } from "react-icons/io";
 import ProgressBar from "../ProgressBar";
-// import TheoryIcon2 from '/Logo.svg';
 import './index.scss';
 
 interface Props {
@@ -61,8 +60,7 @@ const SubjectCard: React.FC<Props> = props => {
                     </div>
                 </div>
                 
-                <ToggleIcon className='toggle-icon' />
-                {/* <TheoryIcon2 /> */}
+                <ToggleIcon className={`toggle-icon ${isActive? 'active' : ''}`} />
             </div>
             {isActive && (
                 <>

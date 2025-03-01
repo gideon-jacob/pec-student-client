@@ -26,32 +26,39 @@
             align-items: center;
             cursor: pointer;
 
-            padding: $padding $padding * 1.25;
+            padding: 0 $padding * 0.6;
 
             .activity-icon-wrapper {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                gap: $gap * 1;
 
                 .activity-icon {
-                    font-size: $font-size * 4.5;
+                    font-size: $font-size * 3.5;
                 }
 
                 .text-container {
                     .code {
+                        font-size: $font-size * 1.5;
                         font-weight: 400;
                         margin: 0;
                     }
             
                     .slot {
+                        font-size: $font-size * 1;
                         margin: 0;
                     }
                 }
             }
 
             .toggle-icon {
-                font-size: $font-size * 2;
-                margin-right: $margin;
+                font-size: $font-size * 1.5;
+                transition: 0.5s;
+            }
+
+            .toggle-icon.active {
+                transform: rotate(-180deg);
             }
         }
 
