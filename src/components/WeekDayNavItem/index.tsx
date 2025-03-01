@@ -4,14 +4,14 @@ import './index.scss'
 interface Props {
     day: string;
     isActive: boolean;
-    onChangeActiveWeekDay: (weekday: string) => void;
+    onChangeActiveWeekDay: (weekday: string, element: HTMLButtonElement) => void;
     setActiveDayRef: (element: HTMLButtonElement) => void;
 }
 
 const WeekDayNavItem: React.FC<Props> = props => {
     const { day, isActive, onChangeActiveWeekDay, setActiveDayRef } = props
     const activeClassName = isActive ? 'active' : ''
-    const handleClick = () => onChangeActiveWeekDay(day)
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => onChangeActiveWeekDay(day, event.currentTarget)
 
     return (
         <button 

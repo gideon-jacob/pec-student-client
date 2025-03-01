@@ -48,11 +48,17 @@ class Home extends Component<unknown, HomeState> {
         this.activeDayRef = element
     }
 
-    onChangeActiveWeekDay = (weekday: string) => {
+    onChangeActiveWeekDay = (weekday: string, element: HTMLButtonElement) => {
         this.setState({
             activeWeekday: weekday,
             activeSlotNumber: 0,
         })
+        this.setActiveDayRef(element)
+        this.activeDayRef?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+        });
     }
 
     onChangeActiveSlot = (slotNumber: number) => {
