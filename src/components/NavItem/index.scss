@@ -2,23 +2,104 @@
 
 .navbar {
     .nav-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         text-decoration: none;
-        padding: 8px;
-        border-radius: 8px;
-        border: 2px solid transparent;
-
+        
         @include light {
-            color: #1b1826;
+            color: #635c72;
         }
-
+        
         @include dark {
-            // TODO Change color
-            color: #e8def8; // this is icon color
-            // there will be seperate color for text
+            color: #888290;
         }
 
+        @include lg {
+            flex-direction: row;
+            gap: $gap * 1.25;
+            border-radius: $border-radius;
+            padding: $padding * 0.7 $padding * 1.5;
+            padding-right: $padding * 1.75;
+            transition: 0.3s ease-out;
+
+            &:hover {
+                transition: 0.2s ease-in;
+
+                @include light {
+                    background-color: #e7dbf8;
+                }
+                
+                @include dark {
+                    background-color: #443f51;
+                }
+            }
+
+            &.active {
+                @include light {
+                    background-color: #dbc4fd;
+                }
+                
+                @include dark {
+                    background-color: #494456;
+                }
+            }
+        }
+        
         &.active {
-            border: 2px solid #ccc;
+            @include light {
+                color: #211e28;
+            }
+            
+            @include dark {
+                color: #e8def8;
+            }
+
+            .nav-icon-wrapper {
+                @include light {
+                    background-color: #dbc4fd;
+                }
+                
+                @include dark {
+                    background-color: #494456;
+                }
+
+                @include lg {
+                    background-color: transparent !important;
+                }
+            }
+        }
+
+        .nav-icon-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            border-radius: $border-radius;
+            padding: 2px 12px;
+
+            @include lg {
+                padding: 0;
+                align-items: center;
+            }
+        }
+
+        .nav-icon {
+            font-size: $font-size * 1.35;
+
+            @include lg {
+                font-size: $font-size * 1.75;
+            }
+        }
+        
+        .nav-text {
+            margin-top: $margin * 0.25;
+            font-size: $font-size * 0.75;
+
+            @include lg {
+                font-size: $font-size * 1.25;
+            }
         }
     }
 }

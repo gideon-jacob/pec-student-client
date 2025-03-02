@@ -5,6 +5,12 @@ import { Route, Routes } from 'react-router-dom';
 // Components
 import NavItem from './components/NavItem';
 
+// Icons
+import { IoMdHome as HomeIcon } from "react-icons/io";
+import { AiOutlineBarChart as PerformanceIcon } from "react-icons/ai";
+import { GiBookPile as AssignmentsIcon } from "react-icons/gi";
+import { CgProfile as ProfileIcon } from "react-icons/cg";
+
 // Pages
 import Home from './pages/Home';
 import Performance from './pages/Performance';
@@ -17,19 +23,23 @@ import './App.scss'
 const navItemList = [
   {
     children: 'Home',
-    to: '/',
+    to: '/student/',
+    Icon: HomeIcon,
   },
   {
     children: 'Performance',
-    to: '/performance',
+    to: '/student/performance',
+    Icon: PerformanceIcon,
   },
   {
     children: 'Assignments',
-    to: '/assignments',
+    to: '/student/assignments',
+    Icon: AssignmentsIcon,
   },
   {
     children: 'Profile',
-    to: '/profile',
+    to: '/student/profile',
+    Icon: ProfileIcon,
   },
 ]
 
@@ -47,10 +57,10 @@ class App extends Component {
       <div className='bg-container'>
         <div className='body'>
           <Routes>
-            <Route index path='/' Component={Home} />
-            <Route path='/performance' Component={Performance} />
-            <Route path='/assignments' Component={Assignments} />
-            <Route path='/profile' Component={Profile} />
+            <Route index path='/student/' Component={Home} />
+            <Route path='/student/performance' Component={Performance} />
+            <Route path='/student/assignments' Component={Assignments} />
+            <Route path='/student/profile' Component={Profile} />
           </Routes>
         </div>
 
@@ -59,9 +69,11 @@ class App extends Component {
             navItemList.map((navDetails, index) => (
               <NavItem
                 key={index}
-                {...navDetails}
+                children={navDetails.children}
+                to={navDetails.to}
                 isActive={activePage === navDetails.to}
                 changeActivePage={this.changeActivePage}
+                Icon={navDetails.Icon}
               />
             ))
           }

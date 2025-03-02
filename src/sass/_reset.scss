@@ -15,12 +15,8 @@ body {
 }
 
 button {
-    outline: none;
-
-    &:focus {
-        outline: none;
-    }
-
+    &,
+    &:focus,
     &:active {
         outline: none;
     }
