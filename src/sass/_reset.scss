@@ -13,3 +13,19 @@ body {
     margin: 0;
     font-family: $font-family;
 }
+
+button {
+    outline: none;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:active {
+        outline: none;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
