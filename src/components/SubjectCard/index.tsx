@@ -148,10 +148,12 @@ class SubjectCard extends React.Component<Props> {
                                 </p>
                             </div>
 
-                            <ProgressBar
-                                percentage={attendancePercentage}
-                                description='Attendance'
-                            />
+                            <div className="progress-bar-container">
+                                <ProgressBar
+                                    percentage={attendancePercentage}
+                                    description='Attendance'
+                                />
+                            </div>
                         </div>
                     </>
                 )}
