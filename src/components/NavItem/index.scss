@@ -38,7 +38,7 @@
 
             &.active {
                 @include light {
-                    background-color: #dbc4fd;
+                    background-color: #eaddfe;
                 }
                 
                 @include dark {
@@ -58,7 +58,7 @@
 
             .nav-icon-wrapper {
                 @include light {
-                    background-color: #dbc4fd;
+                    background-color: #eaddfe;
                 }
                 
                 @include dark {

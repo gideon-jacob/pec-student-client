@@ -5,12 +5,12 @@ import 'react-circular-progressbar/dist/styles.css';
 
 interface Props {
     percentage: number;
-    className?: string;
     title?: string;
+    description?: string;
 }
 
 const ProgressBar: React.FC<Props> = props => {
-    const { percentage, className, title } = props 
+    const { percentage, title, description } = props 
     
     return (
         <div className='progress-bar-container'>
@@ -20,7 +20,7 @@ const ProgressBar: React.FC<Props> = props => {
             <CircularProgressbar
                 value={percentage}
                 text={`${percentage}%`}
-                className={`progress-bar-dark ${className}`}
+                className="progress-bar-dark"
                 styles={buildStyles({
                     textColor: '#c1acf1',
                     pathColor: '#c1acf1',
@@ -31,13 +31,15 @@ const ProgressBar: React.FC<Props> = props => {
             <CircularProgressbar
                 value={percentage}
                 text={`${percentage}%`}
-                className={`progress-bar-light ${className}`}
+                className="progress-bar-light"
                 styles={buildStyles({
                     textColor: '#7660ae',
                     pathColor: '#7660ae',
                     trailColor: '#7660ae44',
                 })}
             />
+
+            {description && <p className='description'>{description}</p>}
         </div>
     );
 };

@@ -5,18 +5,49 @@
     .subject-card {
         display: flex;
         flex-direction: column;
+        justify-content: center;
 
         border-radius: $border-radius;
-        padding: $padding;
+        padding: $padding * 1.2 $padding;
+
+        @include xs {
+            min-height: 80px;
+        }
+
+        @include lg {
+            min-height: unset;
+        }
 
         @include light {
-            background-color: #ede4fa;
+            background-color: #f3ecf8;
             color: #635c72;
         }
 
         @include dark {
-            background-color: #443f51;
+            background-color: #312e37;
             color: #ccc3db;
+        }
+
+        &.in-progress {
+            --progress: 25%;
+
+            @include light {
+                background: linear-gradient(to right, #e4d7f7 var(--progress), #f3ecf8 var(--progress));
+            }
+    
+            @include dark {
+                background: linear-gradient(to right, #443f51 var(--progress), #312e37 var(--progress));
+            }
+        }
+
+        &.completed {
+            @include light {
+                background-color: #e4d7f7;
+            }
+    
+            @include dark {
+                background-color: #443f51;
+            }
         }
 
         .toggle-icon-wrapper {
@@ -35,18 +66,20 @@
                 gap: $gap * 1;
 
                 .activity-icon {
-                    font-size: $font-size * 3.5;
+                    font-size: $font-size * 2.5;
                 }
 
                 .text-container {
                     .code {
-                        font-size: $font-size * 1.5;
+                        font-size: $font-size * 1.2;
                         font-weight: 400;
+                        line-height: 1.2;
                         margin: 0;
                     }
             
                     .slot {
-                        font-size: $font-size * 1;
+                        font-size: $font-size * 0.9;
+                        font-weight: 400;
                         margin: 0;
                     }
                 }
@@ -54,7 +87,7 @@
 
             .toggle-icon {
                 font-size: $font-size * 1.5;
-                transition: 0.5s;
+                transition: transform 0.5s;
             }
 
             .toggle-icon.active {
@@ -62,22 +95,41 @@
             }
         }
 
-
         .seperator {
             width: 100%;
+            margin: $margin 0;
+            border: 1px solid currentColor;
+            background-color: currentColor;
+            opacity: 0.3;
         }
 
         .additional-details-container {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            align-items: flex-start;
-            padding: $padding;
-            padding-left: 0;
+            padding-right: $padding * 0.8;
+            gap: $gap * 2;
 
             .text-container {
-                * {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: $gap * 0.5;
+                
+                .subject-name {
                     margin: 0;
+                    font-weight: 500;
+                    font-size: $font-size * 1;
+                }
+                
+                .faculty-name {
+                    margin: 0;
+                    margin-top: $margin * 0.5;
+                    font-size: $font-size * 0.75;
+
+                    .name-highlight {
+                        font-weight: 500;
+                    }
                 }
             }
         }

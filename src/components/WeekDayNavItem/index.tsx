@@ -15,6 +15,7 @@ const WeekDayNavItem: React.FC<Props> = props => {
 
     return (
         <button 
+            type='button'
             className={`weekday-nav-item ${activeClassName}`}
             onClick={handleClick}
             {...(isActive ? { ref: setActiveDayRef } : {})}

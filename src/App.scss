@@ -1,10 +1,6 @@
 @use './sass' as *;
 @use './sass/reset';
 @use './sass/grid';
-
-@function responsive-height($height) {
-    @return calc(var(--vh) * #{$height});
-}
  
 .bg-container {
     display: flex;
@@ -52,7 +48,7 @@
         flex-shrink: 0;
         gap: $gap;
 
-        padding: $padding * 1.25;
+        padding: $padding * 1.25 $padding * 0.4;
         padding-top: $padding * 0.7;
 
         @include lg {
@@ -68,7 +64,7 @@
         }
 
         @include light {
-            background-color: #f1e8f7;
+            background-color: #f6f0fa;
         }
 
         @include dark {

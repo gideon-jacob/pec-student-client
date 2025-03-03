@@ -1,13 +1,16 @@
 // Packages
 import { Component, ReactNode } from 'react'
 import { getDay } from 'date-fns'
-import { IoIosNotifications as NotificationIcon } from "react-icons/io"
 import axios from 'axios'
 
 // Components
 import StatsCard from '../../components/StatsCard'
 import WeekDayNavItem from '../../components/WeekDayNavItem'
 import SubjectCard from '../../components/SubjectCard'
+
+// Icons
+import { IoIosNotifications as NotificationIcon } from "react-icons/io"
+import { FaMountainSun as NoClassIcon } from "react-icons/fa6";
 
 // Styles
 import './index.scss'
@@ -24,7 +27,7 @@ interface Timetable {
     subjectName: string;
     subjectType: string;
     facultyName: string;
-    attandancePercentage: number;
+    attendancePercentage: number;
 }
 
 interface HomeState {
@@ -38,23 +41,39 @@ class Home extends Component<unknown, HomeState> {
     state: HomeState = {
         activeWeekday: weekdayList[getDay(new Date())],
         activeSlotNumber: 0,  // 0 means no active slot
-        isLoading: localTimetable === null,
+        isLoading: localTimetable == null,
         timetableList: localTimetable? JSON.parse(localTimetable) : [],
     }
 
     private activeDayRef: HTMLButtonElement | null = null;
+    private activeSubjectRef: HTMLDivElement | null = null;
+    private firstSubjectRef: HTMLDivElement | null = null;
+    intervalId: NodeJS.Timeout | undefined;
 
     setActiveDayRef = (element: HTMLButtonElement) => {
         this.activeDayRef = element
+    }
+    
+    setActiveSubjectRef = (element: HTMLDivElement) => {
+        this.activeSubjectRef = element
+    }
+    
+    setFirstSubjectRef = (element: HTMLDivElement) => {
+        this.firstSubjectRef = element
     }
 
     onChangeActiveWeekDay = (weekday: string, element: HTMLButtonElement) => {
         this.setState({
             activeWeekday: weekday,
-            activeSlotNumber: 0,
+            activeSlotNumber: 0,    // Reset active slot
         })
         this.setActiveDayRef(element)
         this.activeDayRef?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+        });
+        this.firstSubjectRef?.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
             inline: 'center',
@@ -75,7 +94,9 @@ class Home extends Component<unknown, HomeState> {
         const { isLoading } = this.state
         
         if (isLoading) {
-            const response = await axios.get('https://5b60i1fwi9.execute-api.ap-south-1.amazonaws.com/api/timetable')
+            const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL
+            const options = {headers: {'Content-Type': 'application/json'}}
+            const response = await axios.get(`${backendUrl}/api/timetable`, options)
             const timetableList = response.data.timetable as Timetable[]
 
             this.setState({
@@ -94,10 +115,26 @@ class Home extends Component<unknown, HomeState> {
             block: 'center',
             inline: 'center',
         });
+        this.activeSubjectRef?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+        });
+        this.intervalId = setInterval(() => {
+            this.forceUpdate();
+        }, 60000);
+    }
+
+    componentWillUnmount() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
     }
 
     render(): ReactNode {
         const { activeWeekday, activeSlotNumber, isLoading, timetableList } = this.state
+        const filteredTimetableList = timetableList.filter(timetable => timetable.day === activeWeekday)
+        const isTimeTableEmpty = filteredTimetableList.length === 0
 
         return (
             <>
@@ -108,13 +145,13 @@ class Home extends Component<unknown, HomeState> {
                             <span className='username'>SUJIT KUMAR</span>
                         </h1>
 
-                        <button className='notification-button'>
+                        <button type='button' className='notification-button'>
                             <NotificationIcon className='notification-icon' />
                         </button>
                     </header>
 
                     <div className='stats-container'>
-                        <StatsCard description='Overall Attandance' metric='98%' />
+                        <StatsCard description='Overall Attendance' metric='98%' />
                         <StatsCard description='Overall Credits Earned' metric='68' />
                         <StatsCard description='CGPA' metric='8.7' />
                     </div>
@@ -135,24 +172,36 @@ class Home extends Component<unknown, HomeState> {
                         </nav>
 
                         {
-                            !isLoading &&
+                            !isLoading && !isTimeTableEmpty &&
                             <div className='subject-card-container'>
                                 {
-                                    timetableList
-                                        .filter(timetable => timetable.day === activeWeekday)
-                                        .map((timetable, index) => (
+                                    filteredTimetableList.map((timetable, index) => (
                                             <SubjectCard
                                                 key={index}
-                                                {...timetable}
+                                                day={timetable.day}
+                                                slotNumber={timetable.slotNumber}
+                                                subjectCode={timetable.subjectCode}
+                                                subjectName={timetable.subjectName}
+                                                subjectType={timetable.subjectType}
+                                                facultyName={timetable.facultyName}
+                                                attendancePercentage={timetable.attendancePercentage}
                                                 isActive={timetable.slotNumber === activeSlotNumber}
                                                 onChangeActiveSlot={this.onChangeActiveSlot}
+                                                setActiveSubjectRef={this.setActiveSubjectRef}
+                                                setFirstSubjectRef={this.setFirstSubjectRef}
                                             />
                                         ))
                                 }
                             </div>
                         }
 
-                        { isLoading && <div className='subject-card-container'></div> }
+                        {
+                            !isLoading && isTimeTableEmpty &&
+                            <div className={`subject-card-container ${isTimeTableEmpty ? 'no-class' : ''}`}>
+                                <NoClassIcon className='no-clas-icon' />
+                                <p className="no-class-text">No Classes Today</p>
+                            </div>
+                        }
                     </div>
                 </div>
             </>

@@ -1,0 +1,3 @@
+@function responsive-height($height) {
+    @return calc(var(--vh) * #{$height});
+}
