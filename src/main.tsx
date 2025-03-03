@@ -29,6 +29,7 @@ const setViewPortHeight = () => {
 window.addEventListener('load', () => {
   setAppTheme()
   setViewPortHeight()
+  localStorage.removeItem('timetableList')
 });
 
 window.addEventListener('resize', () => {
