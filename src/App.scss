@@ -47,6 +47,7 @@
         justify-content: space-evenly;
         flex-shrink: 0;
         gap: $gap;
+        overflow-x: auto;
 
         padding: $padding * 1.25 $padding * 0.4;
         padding-top: $padding * 0.7;

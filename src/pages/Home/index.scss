@@ -1,6 +1,16 @@
 @use '../../sass' as *;
 @use '../../sass/grid';
 
+// Used in loading timetable and no-classes timetable
+%content-template {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    flex-grow: 1;
+}
+
 .home-container {
     display: flex;
     flex-direction: column;
@@ -165,12 +175,7 @@
             }
 
             &.no-class {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 0;
-                flex-grow: 1;
+                @extend %content-template;
                 padding-top: $padding * 2.2; 
                 
                 @include light {
@@ -190,6 +195,24 @@
                     font-weight: 400;
                     text-align: center;
 
+                }
+            }
+
+            &.loading {
+                @extend %content-template;
+                padding-top: $padding * 3; 
+                
+                @include lg {
+                    padding-top: $padding * 3.5; 
+                }
+
+                svg {
+                    scale: 1.05;
+
+                    @include lg {
+                        scale: 1.25;
+                        padding-right: $padding * 1.5;
+                    }
                 }
             }
         }

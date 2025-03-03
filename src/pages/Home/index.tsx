@@ -11,6 +11,7 @@ import SubjectCard from '../../components/SubjectCard'
 // Icons
 import { IoIosNotifications as NotificationIcon } from "react-icons/io"
 import { FaMountainSun as NoClassIcon } from "react-icons/fa6";
+import {InfinitySpin} from 'react-loader-spinner'
 
 // Styles
 import './index.scss'
@@ -41,7 +42,7 @@ class Home extends Component<unknown, HomeState> {
     state: HomeState = {
         activeWeekday: weekdayList[getDay(new Date())],
         activeSlotNumber: 0,  // 0 means no active slot
-        isLoading: localTimetable == null,
+        isLoading: localTimetable === null,
         timetableList: localTimetable? JSON.parse(localTimetable) : [],
     }
 
@@ -200,6 +201,13 @@ class Home extends Component<unknown, HomeState> {
                             <div className={`subject-card-container ${isTimeTableEmpty ? 'no-class' : ''}`}>
                                 <NoClassIcon className='no-clas-icon' />
                                 <p className="no-class-text">No Classes Today</p>
+                            </div>
+                        }
+                        
+                        {
+                            isLoading &&
+                            <div className={`subject-card-container ${isLoading ? 'loading' : ''}`}>
+                                <InfinitySpin color='#7e69b3' />
                             </div>
                         }
                     </div>
