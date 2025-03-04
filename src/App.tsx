@@ -1,6 +1,6 @@
 // Packages
 import { Component, ReactNode } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 // Components
 import NavItem from './components/NavItem';
@@ -61,6 +61,7 @@ class App extends Component {
             <Route path='/student/performance' Component={Performance} />
             <Route path='/student/assignments' Component={Assignments} />
             <Route path='/student/profile' Component={Profile} />
+            <Route path='*' element={<Navigate to='/student/' />} />
           </Routes>
         </div>
 

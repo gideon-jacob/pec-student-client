@@ -2,6 +2,7 @@
 import { Component, ReactNode } from 'react'
 import { getDay } from 'date-fns'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 // Components
 import StatsCard from '../../components/StatsCard'
@@ -17,9 +18,8 @@ import {InfinitySpin} from 'react-loader-spinner'
 import './index.scss'
 
 // Constants
-// import timetableList from './timetable'
 const weekdayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-const localTimetable: string | null = localStorage.getItem('timetableList')
+let localTimetable: string | null = null;
 
 interface Timetable {
     day: string;
@@ -42,8 +42,8 @@ class Home extends Component<unknown, HomeState> {
     state: HomeState = {
         activeWeekday: weekdayList[getDay(new Date())],
         activeSlotNumber: 0,  // 0 means no active slot
-        isLoading: localTimetable === null,
-        timetableList: localTimetable? JSON.parse(localTimetable) : [],
+        isLoading: true,
+        timetableList: [],
     }
 
     private activeDayRef: HTMLButtonElement | null = null;
@@ -106,11 +106,23 @@ class Home extends Component<unknown, HomeState> {
             })
 
             localStorage.setItem('timetableList', JSON.stringify(timetableList))
+            Cookies.set('retainData', 'true', {expires: 1})
         }
     }
 
     componentDidMount(): void {
-        this.getTimetableList();
+        const isExpired: boolean = Cookies.get('retainData') ? false : true
+        localTimetable = localStorage.getItem('timetableList')
+
+        if (isExpired || localTimetable == null) {
+            this.getTimetableList();
+        } else {
+            this.setState({
+                isLoading: false,
+                timetableList: JSON.parse(localTimetable),
+            })
+        }
+
         this.activeDayRef?.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
