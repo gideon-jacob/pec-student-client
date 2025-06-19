@@ -3,6 +3,7 @@ import { Component, ReactNode } from 'react'
 import { getDay } from 'date-fns'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import {v4 as uuidv4} from 'uuid'
 
 // Components
 import StatsCard from '../../components/StatsCard'
@@ -49,7 +50,6 @@ class Home extends Component<unknown, HomeState> {
     private activeDayRef: HTMLButtonElement | null = null;
     private activeSubjectRef: HTMLDivElement | null = null;
     private firstSubjectRef: HTMLDivElement | null = null;
-    // intervalId removed
 
     setActiveDayRef = (element: HTMLButtonElement) => {
         this.activeDayRef = element
@@ -88,19 +88,24 @@ class Home extends Component<unknown, HomeState> {
             } else {
                 return ({ activeSlotNumber: slotNumber })
             }
-        })
+        },
+        () => {
+            this.activeSubjectRef?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'center',
+            });
+        });
     }
 
     getTimetableList = async () => {
-        // Removed isLoading check from here, will be handled by caller or finally block
-        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL
+        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL as string | undefined;
         const options = {headers: {'Content-Type': 'application/json'}}
         try {
-            const response = await axios.get(`${backendUrl}/api/timetable`, options)
-            const timetableList = response.data.timetable as Timetable[]
+            const response = await axios.get<{ timetable: Timetable[] }>(`${backendUrl}/api/timetable`, options)
+            const timetableList = response.data.timetable
 
             this.setState({
-                // isLoading will be set to false in finally
                 timetableList,
             })
 
@@ -121,10 +126,12 @@ class Home extends Component<unknown, HomeState> {
 
         if (isExpired || localTimetable == null) {
             this.setState({ isLoading: true }); // Ensure isLoading is true before fetching
-            this.getTimetableList();
+            this.getTimetableList().catch((error) => {
+                console.error("Failed to fetch timetable data:", error);
+            });
         } else {
             try {
-                const parsedTimetable = JSON.parse(localTimetable);
+                const parsedTimetable = JSON.parse(localTimetable) as Timetable[];
                 this.setState({
                     isLoading: false,
                     timetableList: parsedTimetable,
@@ -133,7 +140,9 @@ class Home extends Component<unknown, HomeState> {
                 console.error("Failed to parse timetable from localStorage:", error);
                 localStorage.removeItem('timetableList'); // Clear corrupted data
                 this.setState({ isLoading: true }); // Ensure isLoading is true before fetching
-                this.getTimetableList(); // Fetch fresh data
+                this.getTimetableList().catch((error) => {
+                    console.error("Failed to fetch timetable data:", error);
+                }); // Fetch fresh data
             }
         }
 
@@ -155,7 +164,8 @@ class Home extends Component<unknown, HomeState> {
     render(): ReactNode {
         const { activeWeekday, activeSlotNumber, isLoading, timetableList } = this.state
         const filteredTimetableList = timetableList.filter(timetable => timetable.day === activeWeekday)
-        const isTimeTableEmpty = filteredTimetableList.length === 0
+        const isTimeTableEmpty = filteredTimetableList.length === 0;
+        const user_fullname = "Sujit Kumar".toUpperCase();
 
         return (
             <>
@@ -164,7 +174,7 @@ class Home extends Component<unknown, HomeState> {
                         {/* TODO: Replace 'USER' with dynamic user data from authentication/profile */}
                         <h1 className='greeting'>
                             GOOD MORNING, <br />
-                            <span className='username'>USER</span>
+                            <span className='username'>{ user_fullname }</span>
                         </h1>
 
                         <button type='button' className='notification-button'>
@@ -197,9 +207,9 @@ class Home extends Component<unknown, HomeState> {
                             !isLoading && !isTimeTableEmpty &&
                             <div className='subject-card-container'>
                                 {
-                                    filteredTimetableList.map((timetable, index) => (
+                                    filteredTimetableList.map((timetable) => (
                                             <SubjectCard
-                                                key={index}
+                                                key={uuidv4()}
                                                 day={timetable.day}
                                                 slotNumber={timetable.slotNumber}
                                                 subjectCode={timetable.subjectCode}

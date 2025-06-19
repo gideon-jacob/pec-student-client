@@ -31,7 +31,45 @@ const slotTiming = [
     '3:10 PM - 4:00 PM',
 ];
 
-class SubjectCard extends React.Component<Props> {
+interface State {
+    isInProgress: boolean;
+    isFinished: boolean;
+    progressValue: number;
+}
+
+class SubjectCard extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+
+        const {
+            day,
+            slotNumber
+        } = props;
+
+        const [startTime, endTime] = this.getDateTime(slotNumber);
+        const slotStatus = this.getSlotStatus(startTime, endTime, day);
+        let isInProgress = false,
+            isFinished = false,
+            progressValue = 0;
+
+        if (slotStatus === 'finished') {
+            [isInProgress, isFinished] = [false, true];
+        } else if (slotStatus === 'upcoming') {
+            [isInProgress, isFinished] = [false, false];
+        } else if (slotStatus === 'in-progress') {
+            [isInProgress, isFinished] = [true, false];
+            progressValue = Math.floor((Date.now() - startTime.getTime()) / (endTime.getTime() - startTime.getTime()) * 100);
+        }
+
+        this.state = {
+            isInProgress,
+            isFinished,
+            progressValue,
+        };
+    }
+
+    intervalId: NodeJS.Timeout | null = null;
+
     getDateTime = (slotNumber: number): [Date, Date] => {
         const [startTime, endTime] = slotTiming[slotNumber - 1].split(' - ');
         const [startHour, startMinute, startPeriod] = startTime.split(/[: ]/);
@@ -46,7 +84,7 @@ class SubjectCard extends React.Component<Props> {
         return [startDate, endDate];
     }
 
-    getSlotStatus = (startTime: Date, endTime: Date, day: string): string => {
+    getSlotStatus = (startTime: Date, endTime: Date, day: string): 'finished' | 'upcoming' | 'in-progress' => {
         const today = new Date();
         const currentDayIndex = today.getDay();
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -81,9 +119,28 @@ class SubjectCard extends React.Component<Props> {
             return <ActivityIcon className='activity-icon' />;
     }
 
+    componentDidMount() {
+        const { isInProgress } = this.state;
+        const { slotNumber } = this.props;
+        const [ startTime, endTime ] = this.getDateTime(slotNumber);
+
+        if (isInProgress) {
+            this.intervalId = setInterval(() => {
+                this.setState({
+                    progressValue: Math.floor((Date.now() - startTime.getTime()) / (endTime.getTime() - startTime.getTime()) * 100)
+                });
+            }, 60000);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
+    }
+
     render() {
         const {
-            day,
             slotNumber,
             subjectCode,
             subjectName,
@@ -95,19 +152,14 @@ class SubjectCard extends React.Component<Props> {
             setActiveSubjectRef,
             setFirstSubjectRef,
         } = this.props;
-        const [startTime, endTime] = this.getDateTime(slotNumber);
-        const slotStatus = this.getSlotStatus(startTime, endTime, day);
-        let isInProgress, isFinished, progressValue = 0;
-        let facultyNameList = [facultyName];
 
-        if (slotStatus === 'finished') {
-            [isInProgress, isFinished] = [false, true];
-        } else if (slotStatus === 'upcoming') {
-            [isInProgress, isFinished] = [false, false];
-        } else if (slotStatus === 'in-progress') {
-            [isInProgress, isFinished] = [true, false];
-            progressValue = Math.floor((Date.now() - startTime.getTime()) / (endTime.getTime() - startTime.getTime()) * 100);
-        }
+        const {
+            isInProgress,
+            isFinished,
+            progressValue
+        } = this.state;
+        
+        let facultyNameList = [facultyName];
 
         if (facultyName.includes('/')) {
             facultyNameList = facultyName.split('/');
@@ -117,8 +169,8 @@ class SubjectCard extends React.Component<Props> {
             <div
                 className={`subject-card ${isInProgress ? 'in-progress' : ''} ${isFinished? 'completed' : ''}`}
                 style={{ '--progress': `${progressValue}%` } as React.CSSProperties}
-                {...(isInProgress && { ref: setActiveSubjectRef })}
-                {...(slotNumber === 1 && { ref: setFirstSubjectRef })}
+                {...(isActive && { ref: setActiveSubjectRef })}
+                {...(slotNumber === 1 && !isActive && { ref: setFirstSubjectRef })}
             >
                 <div className='toggle-icon-wrapper' onClick={() => onChangeActiveSlot(slotNumber)}>
                     <div className='activity-icon-wrapper'>

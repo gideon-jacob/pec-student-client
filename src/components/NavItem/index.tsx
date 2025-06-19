@@ -14,10 +14,11 @@ const NavItem: React.FC<Props> = props => {
     return (
         <NavLink
             to={to}
+            end
             className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}
         >
             <div className='nav-icon-wrapper'>
-                <Icon className='nav-icon' />
+            <Icon className='nav-icon' />
             </div>
 
             <span className='nav-text'>{children}</span>

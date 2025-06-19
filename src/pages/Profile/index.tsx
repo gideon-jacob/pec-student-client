@@ -46,17 +46,17 @@ class Profile extends Component {
     }
 
     onClickRefreshData = async () => {
-        await this.setState({ isLoading: true })
+        this.setState({ isLoading: true })
         
-        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL
+        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL as string | undefined;
         const options = {headers: {'Content-Type': 'application/json'}}
-        const response = await axios.get(`${backendUrl}/api/timetable`, options)
-        const timetableList = response.data.timetable as Timetable[]
+        const response = await axios.get<{ timetable: Timetable[] }>(`${backendUrl}/api/timetable`, options)
+        const timetableList = response.data.timetable
         
         localStorage.setItem('timetableList', JSON.stringify(timetableList))
         Cookies.set('retainData', 'true', {expires: 1})
 
-        await this.setState({ isLoading: false })
+        this.setState({ isLoading: false })
     }
 
     componentDidMount(): void {
@@ -87,7 +87,12 @@ class Profile extends Component {
                 <br />
                 <br />
 
-                <button type="button" onClick={this.onClickRefreshData}>Refresh Data</button>
+                <button type="button" onClick={() => {
+                    this.onClickRefreshData().catch((error) => {
+                        console.error("Error refreshing data:", error);
+                        this.setState({ isLoading: false });
+                    });
+                }}>Refresh Data</button>
 
                 <br />
                 <br />
