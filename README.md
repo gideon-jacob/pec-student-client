@@ -1,50 +1,109 @@
-# React + TypeScript + Vite
+# PEC Student Hub (Student Academic Management Portal)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Vision
 
-Currently, two official plugins are available:
+PEC Student Hub is a student-centric application designed to provide a seamless and user-friendly interface for managing academic information. Our vision is to empower students by offering easy access to all their academic details in one consolidated platform, reducing complexity and enhancing their educational experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Scope and Features
 
-## Expanding the ESLint configuration
+### Overall Goal
+To help students efficiently manage all their academic details, track progress, and stay informed about important academic events and information.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Current Features
+The application currently includes the following features (some pages are placeholders pending full backend integration):
+*   **Dashboard/Home:** Displays a daily timetable and quick stats.
+*   **Timetable Viewing:** Allows students to view their class schedule by day.
+*   **Assignments:** A section to track upcoming and past assignments (currently a placeholder page).
+*   **Performance:** A section to view academic performance metrics (currently a placeholder page).
+*   **User Profile:** Displays user information (currently a placeholder page).
+*   **Navigation:** Smooth client-side navigation using React Router.
+*   **Responsive Design:** Adapts to different screen sizes for accessibility on various devices.
 
-- Configure the top-level `parserOptions` property like this:
+### Planned Features
+Based on user feedback and project goals, the following features are planned for future development:
+*   **Exam Seating Information:** Display assigned seating for upcoming exams.
+*   **Semester Results:** Show current and past semester grades and GPA.
+*   **Previous Semester Details:** Access to timetables, attendance, and results from prior semesters.
+*   **Notifications:** Alerts for important academic events, deadlines, or new information.
+*   **Detailed Attendance Tracking:** More granular attendance information per subject.
+*   **User Authentication:** Secure login for students.
+*   **Dynamic Data Integration:** Full integration with college backend systems for real-time data.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+Follow these instructions to set up and run the project locally.
+
+### Prerequisites
+
+*   Node.js (version 18.x or later recommended)
+*   npm (usually comes with Node.js) or Yarn
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd pec-student
+    ```
+    (Replace `<repository-url>` with the actual URL of the repository.)
+
+2.  **Install dependencies:**
+    Using npm:
+    ```bash
+    npm install
+    ```
+    Or using Yarn:
+    ```bash
+    yarn install
+    ```
+
+### Running the Development Server
+
+Once dependencies are installed, you can start the local development server:
+
+Using npm:
+```bash
+npm run dev
+```
+Or using Yarn:
+```bash
+yarn dev
+```
+This will typically start the application on `http://localhost:5173` (the port might vary if 5173 is in use). The application supports Hot Module Replacement (HMR) for a fast development experience.
+
+### Building for Production
+
+To create a production build of the project:
+
+Using npm:
+```bash
+npm run build
+```
+Or using Yarn:
+```bash
+yarn build
+```
+This command will generate a `dist` folder containing the optimized static assets for deployment.
+
+## Linting
+
+To check the codebase for linting errors and warnings:
+```bash
+npm run lint
+```
+Or using Yarn:
+```bash
+yarn lint
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Technology Stack
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+*   **Frontend:** React, TypeScript, Vite
+*   **Styling:** SCSS
+*   **Routing:** React Router DOM
+*   **HTTP Client:** Axios
+*   **Linting:** ESLint, Prettier (Prettier setup not explicitly mentioned but common)
+*   **Icons:** React Icons
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Contributing
+(Details to be added later - for now, focus on setup and understanding the project.)
