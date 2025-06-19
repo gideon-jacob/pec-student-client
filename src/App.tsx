@@ -43,16 +43,8 @@ const navItemList = [
   },
 ]
 
-class App extends Component {  
-  state = { activePage: window.location.pathname }
-
-  changeActivePage = (path: string) => {
-    this.setState({activePage: path})
-  }
-  
+class App extends Component {
   render(): ReactNode {
-    const { activePage } = this.state
-    
     return (
       <div className='bg-container'>
         <div className='body'>
@@ -70,12 +62,11 @@ class App extends Component {
             navItemList.map((navDetails, index) => (
               <NavItem
                 key={index}
-                children={navDetails.children}
                 to={navDetails.to}
-                isActive={activePage === navDetails.to}
-                changeActivePage={this.changeActivePage}
                 Icon={navDetails.Icon}
-              />
+              >
+                {navDetails.children}
+              </NavItem>
             ))
           }
         </nav>

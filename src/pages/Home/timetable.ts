@@ -1,4 +1,4 @@
-interface Timetable {
+interface RawTimetableSlot { // Renamed from Timetable
     day: string;
     slotNumber: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
     subjectId: number;
@@ -14,7 +14,7 @@ interface ClassDetails {
     className: string;
     academicYear: number;
     facultyDetailsList: SubjectFacultyMappingInfo[];
-    timetableList: Timetable[];
+    timetableList: RawTimetableSlot[];
 }
 
 interface SubjectDetails {
@@ -36,7 +36,7 @@ interface StudentInfo {
     attandanceDetailsList: SubjectAttandanceInfo[];
 }
 
-export const timetableList: Timetable[] = [
+export const timetableList: RawTimetableSlot[] = [
     {
         day: 'Monday',
         slotNumber: 1,
@@ -686,7 +686,7 @@ export const studentsInfoList: StudentInfo[] = [
     }
 ]
 
-const formattedTimetableList = timetableList.map(timetable => {
+const formattedTimetableList = timetableList.map((timetable: RawTimetableSlot) => {
     const { subjectId } = timetable
 
     const subjectDetails = subjectDetailsList.find(eachSubject => {

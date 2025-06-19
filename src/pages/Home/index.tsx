@@ -49,7 +49,7 @@ class Home extends Component<unknown, HomeState> {
     private activeDayRef: HTMLButtonElement | null = null;
     private activeSubjectRef: HTMLDivElement | null = null;
     private firstSubjectRef: HTMLDivElement | null = null;
-    intervalId: NodeJS.Timeout | undefined;
+    // intervalId removed
 
     setActiveDayRef = (element: HTMLButtonElement) => {
         this.activeDayRef = element
@@ -92,21 +92,26 @@ class Home extends Component<unknown, HomeState> {
     }
 
     getTimetableList = async () => {
-        const { isLoading } = this.state
-        
-        if (isLoading) {
-            const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL
-            const options = {headers: {'Content-Type': 'application/json'}}
+        // Removed isLoading check from here, will be handled by caller or finally block
+        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL
+        const options = {headers: {'Content-Type': 'application/json'}}
+        try {
             const response = await axios.get(`${backendUrl}/api/timetable`, options)
             const timetableList = response.data.timetable as Timetable[]
 
             this.setState({
-                isLoading: false,
+                // isLoading will be set to false in finally
                 timetableList,
             })
 
             localStorage.setItem('timetableList', JSON.stringify(timetableList))
             Cookies.set('retainData', 'true', {expires: 1})
+        } catch (error) {
+            console.error("Failed to load timetable:", error);
+            // Optionally set an error state here if you have one
+            // this.setState({ error: 'Failed to load timetable' });
+        } finally {
+            this.setState({ isLoading: false })
         }
     }
 
@@ -115,12 +120,21 @@ class Home extends Component<unknown, HomeState> {
         localTimetable = localStorage.getItem('timetableList')
 
         if (isExpired || localTimetable == null) {
+            this.setState({ isLoading: true }); // Ensure isLoading is true before fetching
             this.getTimetableList();
         } else {
-            this.setState({
-                isLoading: false,
-                timetableList: JSON.parse(localTimetable),
-            })
+            try {
+                const parsedTimetable = JSON.parse(localTimetable);
+                this.setState({
+                    isLoading: false,
+                    timetableList: parsedTimetable,
+                });
+            } catch (error) {
+                console.error("Failed to parse timetable from localStorage:", error);
+                localStorage.removeItem('timetableList'); // Clear corrupted data
+                this.setState({ isLoading: true }); // Ensure isLoading is true before fetching
+                this.getTimetableList(); // Fetch fresh data
+            }
         }
 
         this.activeDayRef?.scrollIntoView({
@@ -128,21 +142,15 @@ class Home extends Component<unknown, HomeState> {
             block: 'center',
             inline: 'center',
         });
-        this.activeSubjectRef?.scrollIntoView({
+        this.firstSubjectRef?.scrollIntoView({ // Changed from activeSubjectRef
             behavior: 'smooth',
             block: 'center',
             inline: 'center',
         });
-        this.intervalId = setInterval(() => {
-            this.forceUpdate();
-        }, 60000);
+        // setInterval and forceUpdate removed
     }
 
-    componentWillUnmount() {
-        if (this.intervalId) {
-            clearInterval(this.intervalId);
-        }
-    }
+    // componentWillUnmount removed as its only purpose was to clear the interval
 
     render(): ReactNode {
         const { activeWeekday, activeSlotNumber, isLoading, timetableList } = this.state
@@ -153,9 +161,10 @@ class Home extends Component<unknown, HomeState> {
             <>
                 <div className='home-container'>
                     <header className='home-header'>
+                        {/* TODO: Replace 'USER' with dynamic user data from authentication/profile */}
                         <h1 className='greeting'>
                             GOOD MORNING, <br />
-                            <span className='username'>SUJIT KUMAR</span>
+                            <span className='username'>USER</span>
                         </h1>
 
                         <button type='button' className='notification-button'>
