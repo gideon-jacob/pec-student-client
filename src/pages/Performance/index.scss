@@ -1,0 +1,513 @@
+@use '../../sass' as *;
+@use '../../sass/grid';
+
+// Used for loading and no-data states
+%content-template {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    flex-grow: 1;
+}
+
+.performance-container {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
+    @include lg {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        flex-grow: 1;
+        min-height: 100vh;
+    }
+
+    .performance-header {
+        padding-top: $padding * 2;
+        padding-left: $padding;
+        padding-right: $padding * 2;
+        width: grid.columns(12);
+    
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        align-self: flex-start;
+
+        .greeting {
+            font-size: $font-size * 0.9;
+            font-weight: 400;
+
+            .username {
+                font-size: $font-size * 1.9;
+                
+                @include lg {
+                    font-size: $font-size * 2.5;
+                }
+            }
+        }
+
+        .notification-button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+
+            .notification-icon {
+                font-size: $font-size * 1.75;
+
+                @include lg {
+                    font-size: $font-size * 2.35;
+                }
+    
+                @include light {
+                    color: #654ea2;
+                }
+    
+                @include dark {
+                    color: #d1bdff;
+                }
+            }
+        }
+    }
+
+    .stats-container {
+        display: flex;
+        flex-direction: row;
+        align-content: flex-start;
+        flex-shrink: 0;
+        gap: $gap;
+
+        overflow-x: auto;
+        padding: $padding;
+        width: grid.columns(12);
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        @include lg {
+            order: 2;
+            width: grid.columns(5);
+            flex-wrap: wrap;
+        }
+    }
+
+    .performance-main {
+        width: grid.columns(12);
+        display: flex;
+        flex-direction: column;
+        min-height: responsive-height(60);
+        
+        @include lg {
+            order: 1;
+            width: grid.columns(7);
+            height: responsive-height(82);
+        }
+
+        .semester-navbar {
+            display: flex;
+            flex-direction: row;
+            gap: $gap;
+            flex-shrink: 0;
+            padding: $padding;
+            overflow-x: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            @include md {
+                justify-content: center;
+            }
+
+            @include lg {
+                justify-content: flex-start;
+                padding-right: $padding * 1.5;
+                flex-wrap: wrap;
+            }
+
+            .semester-nav-item {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: $padding * 0.5 $padding;
+                border-radius: $border-radius * 0.5;
+                font-size: $font-size * 0.9;
+                font-weight: 500;
+                white-space: nowrap;
+                transition: all 0.2s ease;
+
+                @include light {
+                    color: #664fa3;
+                    border: 1px solid #e0d4f0;
+                }
+
+                @include dark {
+                    color: #c2adf2;
+                    border: 1px solid #4a3574;
+                }
+
+                &:hover {
+                    @include light {
+                        background-color: #f5f0ff;
+                    }
+
+                    @include dark {
+                        background-color: #3a2b58;
+                    }
+                }
+
+                &.active {
+                    @include light {
+                        background-color: #eaddfe;
+                        color: #664fa3;
+                        border-color: #664fa3;
+                    }
+
+                    @include dark {
+                        background-color: #4f378b;
+                        color: #c2adf2;
+                        border-color: #c2adf2;
+                    }
+                }
+
+                @include lg {
+                    border-radius: $border-radius * 0.3;
+                }
+            }
+        }
+
+        .performance-content {
+            display: flex;
+            flex-direction: column;
+            gap: $gap * 1.5;
+            padding: $padding;
+            flex-grow: 1;
+
+            @include lg {
+                overflow-y: auto;
+
+                &::-webkit-scrollbar {
+                    display: block;
+                    width: 5px;
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+
+                    @include light {
+                        background-color: #cccccc66;
+                    }
+
+                    @include dark {
+                        background-color: #cccccc11;
+                    }
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: transparent;
+                    margin: 10px 0;
+                }
+            }
+
+            .semester-overview {
+                h2 {
+                    font-size: $font-size * 1.5;
+                    font-weight: 600;
+                    margin-bottom: $margin * 0.5;
+
+                    @include light {
+                        color: #2d1b3d;
+                    }
+
+                    @include dark {
+                        color: #e2d6f0;
+                    }
+                }
+
+                .semester-stats {
+                    display: flex;
+                    flex-direction: row;
+                    gap: $gap;
+                    flex-wrap: wrap;
+
+                    .stat-item {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: $padding * 0.75;
+                        border-radius: $border-radius * 0.5;
+                        min-width: 80px;
+
+                        @include light {
+                            background-color: #f5f0ff;
+                            color: #664fa3;
+                        }
+
+                        @include dark {
+                            background-color: #3a2b58;
+                            color: #c2adf2;
+                        }
+
+                        .stat-label {
+                            font-size: $font-size * 0.8;
+                            font-weight: 500;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            margin-bottom: 2px;
+
+                            @include light {
+                                color: #8a7299;
+                            }
+
+                            @include dark {
+                                color: #a694c2;
+                            }
+                        }
+
+                        .stat-value {
+                            font-size: $font-size * 1.25;
+                            font-weight: 700;
+                        }
+                    }
+                }
+            }
+
+            .subjects-container {
+                h3 {
+                    font-size: $font-size * 1.25;
+                    font-weight: 600;
+                    margin-bottom: $margin;
+
+                    @include light {
+                        color: #2d1b3d;
+                    }
+
+                    @include dark {
+                        color: #e2d6f0;
+                    }
+                }
+
+                .subjects-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: $gap;
+
+                    @include md {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+
+                    @include lg {
+                        grid-template-columns: repeat(1, 1fr);
+                        gap: $gap * 0.75;
+                    }
+
+                    .subject-performance-card {
+                        border-radius: $border-radius;
+                        padding: $padding;
+                        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+                        @include light {
+                            background-color: #ffffff;
+                            border: 1px solid #e0d4f0;
+                            box-shadow: 0 2px 4px rgba(102, 79, 163, 0.1);
+                        }
+
+                        @include dark {
+                            background-color: #2a1e3d;
+                            border: 1px solid #4a3574;
+                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                        }
+
+                        &:hover {
+                            transform: translateY(-2px);
+                            
+                            @include light {
+                                box-shadow: 0 4px 8px rgba(102, 79, 163, 0.15);
+                            }
+
+                            @include dark {
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+                            }
+                        }
+
+                        .subject-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: $margin * 0.5;
+
+                            .subject-code {
+                                font-size: $font-size * 1.1;
+                                font-weight: 700;
+                                margin: 0;
+
+                                @include light {
+                                    color: #664fa3;
+                                }
+
+                                @include dark {
+                                    color: #c2adf2;
+                                }
+                            }
+
+                            .subject-grade {
+                                font-size: $font-size * 1.25;
+                                font-weight: 800;
+                                padding: 4px 8px;
+                                border-radius: $border-radius * 0.25;
+
+                                @include light {
+                                    background-color: #e8f5e8;
+                                    color: #2d7d2d;
+                                }
+
+                                @include dark {
+                                    background-color: #1e3a1e;
+                                    color: #7fd67f;
+                                }
+                            }
+                        }
+
+                        .subject-name {
+                            font-size: $font-size * 0.9;
+                            font-weight: 400;
+                            margin: 0 0 $margin * 0.75 0;
+                            line-height: 1.4;
+
+                            @include light {
+                                color: #5a5a5a;
+                            }
+
+                            @include dark {
+                                color: #b8b8b8;
+                            }
+                        }
+
+                        .marks-breakdown {
+                            display: flex;
+                            flex-direction: column;
+                            gap: $gap * 0.5;
+                            margin-bottom: $margin * 0.75;
+
+                            .mark-item {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: $padding * 0.25 0;
+
+                                &.total {
+                                    border-top: 1px solid;
+                                    padding-top: $padding * 0.5;
+                                    font-weight: 600;
+
+                                    @include light {
+                                        border-color: #e0d4f0;
+                                    }
+
+                                    @include dark {
+                                        border-color: #4a3574;
+                                    }
+                                }
+
+                                .mark-label {
+                                    font-size: $font-size * 0.85;
+                                    font-weight: 500;
+
+                                    @include light {
+                                        color: #6b6b6b;
+                                    }
+
+                                    @include dark {
+                                        color: #a8a8a8;
+                                    }
+                                }
+
+                                .mark-value {
+                                    font-size: $font-size * 0.9;
+                                    font-weight: 600;
+
+                                    @include light {
+                                        color: #2d1b3d;
+                                    }
+
+                                    @include dark {
+                                        color: #e2d6f0;
+                                    }
+                                }
+                            }
+                        }
+
+                        .subject-footer {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-size: $font-size * 0.8;
+                            font-weight: 500;
+
+                            @include light {
+                                color: #8a7299;
+                            }
+
+                            @include dark {
+                                color: #a694c2;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .no-data {
+                @extend %content-template;
+                padding-top: $padding * 2.2; 
+                
+                @include light {
+                    color: #eae4ed;
+                }
+                
+                @include dark {
+                    color: #635c72;
+                }
+
+                .no-data-icon {
+                    font-size: $font-size * 6;
+                    margin-bottom: $margin;
+                }
+
+                p {
+                    font-size: $font-size * 1.2;
+                    font-weight: 400;
+                    text-align: center;
+                    margin: 0;
+                }
+            }
+        }
+
+        .loading-container {
+            @extend %content-template;
+            padding-top: $padding * 3; 
+            
+            @include lg {
+                padding-top: $padding * 3.5; 
+            }
+
+            svg {
+                scale: 1.05;
+
+                @include lg {
+                    scale: 1.25;
+                    padding-right: $padding * 1.5;
+                }
+            }
+        }
+    }
+}
